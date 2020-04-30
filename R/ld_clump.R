@@ -117,7 +117,11 @@ ld_clump_local <- function(dat, clump_kb, clump_r2, clump_p, bfile, plink_bin)
 		" --clump-kb ", clump_kb, 
 		" --out ", shQuote(fn, type=shell)
 	)
-	system(fun2)
+        system(fun2)
+        if(!file.exists(paste(fn, ".clumped", sep="")){
+            message("no variants left after clumping")
+            return(subset(dat, FALSE))
+        }
 	res <- read.table(paste(fn, ".clumped", sep=""), header=T)
 	unlink(paste(fn, "*", sep=""))
 	y <- subset(dat, !dat[["rsid"]] %in% res[["SNP"]])
